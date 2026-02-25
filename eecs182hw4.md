@@ -224,7 +224,7 @@ Using the composite S-parameters from Problem 2,
 
 ## Problem 4: $\Gamma_{\text{ML}}$ and $\Gamma_{\text{MS}}$ (Simultaneous Conjugate Match)
 
-For the unconditionally stable composite device, the simultaneous conjugate match gives the source and load reflection coefficients that maximize transducer gain. Using the composite S-parameters $S^{\prime}_{ij}$ and $\Delta^{\prime} = S^{\prime}_{11}S^{\prime}_{22} - S^{\prime}_{12}S^{\prime}_{21}$:
+For the unconditionally stable composite device, the simultaneous conjugate match gives the source and load reflection coefficients that maximize transducer gain. Using the composite S-parameters $S'_{ij}$ and $\Delta' = S'_{11}S'_{22} - S'_{12}S'_{21}$:
 
 **Source side (input match):**
 
