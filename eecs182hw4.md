@@ -51,6 +51,7 @@ Design a MIC single stage amplifier using SMC. Follow the steps below to do your
 ![HW4 assignment](HW4.JPG)
 
 ---
+*All numerical values are from [problem_calc.py](problem_calc.py).*
 
 ## Problem 1: Stability and Stability Circles
 
@@ -65,8 +66,6 @@ Convert from magnitude and angle (linear scale, degrees) using $S_{ij} = |S_{ij}
 | $S_{12}$  | $0.139 + j0.144$          |
 | $S_{22}$  | $0.341 - j0.766$          |
 
-*All Problem 1 and Problem 2 numerical values are from [problem_calc.py](problem_calc.py).*
-
 ### 1.2 Stability Factor $K$
 
 **Definitions** (Rollett):
@@ -74,6 +73,7 @@ Convert from magnitude and angle (linear scale, degrees) using $S_{ij} = |S_{ij}
 $$
 \Delta = S_{11}S_{22} - S_{12}S_{21}
 $$
+
 
 $$
 K = \frac{1 - |S_{11}|^2 - |S_{22}|^2 + |\Delta|^2}{2\,|S_{12}S_{21}|}
@@ -93,11 +93,13 @@ Here $K = 0.569 < 1$, so the device is **conditionally stable**. The input and o
 Locus of $\Gamma_L$ for which $|\Gamma_{\text{in}}| = 1$.
 
 **Center:**
+
 $$
 C_L = \frac{(S_{22} - \Delta S_{11}^*)^*}{|S_{22}|^2 - |\Delta|^2}
 $$
 
 **Radius:**
+
 $$
 r_L = \frac{|S_{12}S_{21}|}{\left| |S_{22}|^2 - |\Delta|^2 \right|}
 $$
@@ -111,11 +113,13 @@ $$
 Locus of $\Gamma_S$ for which $|\Gamma_{\text{out}}| = 1$.
 
 **Center:**
+
 $$
 C_S = \frac{(S_{11} - \Delta S_{22}^*)^*}{|S_{11}|^2 - |\Delta|^2}
 $$
 
 **Radius:**
+
 $$
 r_S = \frac{|S_{12}S_{21}|}{\left| |S_{11}|^2 - |\Delta|^2 \right|}
 $$
@@ -151,11 +155,13 @@ $$
 Device output is connected to resistor input. The cascade is computed using T-parameters: $\mathbf{T}_{\text{cascade}} = \mathbf{T}_{\text{device}} \cdot \mathbf{T}_{\text{resistor}}$, then convert back to S.
 
 **S → T** (for each two-port):
+
 $$
 T_{11} = \frac{-\det(\mathbf{S})}{S_{21}}, \quad T_{12} = \frac{S_{11}}{S_{21}}, \quad T_{21} = \frac{-S_{22}}{S_{21}}, \quad T_{22} = \frac{1}{S_{21}}.
 $$
 
 **T → S** (for composite):
+
 $$
 S'_{11} = \frac{T_{12}}{T_{22}}, \quad S'_{21} = \frac{1}{T_{22}}, \quad S'_{12} = \frac{\det(\mathbf{T})}{T_{22}}, \quad S'_{22} = \frac{-T_{21}}{T_{22}}, \quad \det(\mathbf{T}) = T_{11}T_{22} - T_{12}T_{21}.
 $$
