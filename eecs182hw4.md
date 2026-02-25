@@ -274,7 +274,7 @@ Both $|\Gamma_{\text{MS}}|$ and $|\Gamma_{\text{ML}}|$ are less than 1, so the c
 
 ## Step 6: Input and Output Matching Networks (Smith Chart)
 
-Design frequency $f = 5\,\text{GHz}$, $Z_0 = 50\,\Omega$. The matching networks transform 50 $\Omega$ to the conjugate-match impedances $Z_{\text{MS}}$ (input) and $Z_{\text{ML}}$ (output) using two-element L-sections. Below is a procedure for drawing the design on a Smith chart by hand.
+Design frequency $f = 5\,\text{GHz}$, $Z_0 = 50\,\Omega$. The matching networks transform 50 $\Omega$ to the conjugate-match impedances $Z_{\text{MS}}$ (input) and $Z_{\text{ML}}$ (output) using two-element L-sections.
 
 ### Target impedances (for the chart)
 
@@ -295,3 +295,17 @@ Design frequency $f = 5\,\text{GHz}$, $Z_0 = 50\,\Omega$. The matching networks 
 | --- | --- | --- | --- |
 | Input (50 $\Omega$ → $Z_{\text{MS}}$) | series L, shunt C | $L = 1.46\,\text{nH}$ (series) | $C = 0.34\,\text{pF}$ (shunt) |
 | Output (50 $\Omega$ → $Z_{\text{ML}}$) | shunt C, series L | $C = 0.41\,\text{pF}$ (shunt) | $L = 1.25\,\text{nH}$ (series) |
+
+---
+
+## Step 7: Bias Network and Decoupling Capacitors
+
+The bias network supplies DC gate bias to the device while isolating RF at the bias ports. A decoupling capacitor are used to short RF to ground at the bias node so that the matching networks see only the intended impedances. A quarter-wave transformer can be used to present an open circuit at the device terminal at the design frequency while passing DC. The schematic below shows the bias network and decoupling capacitors integrated with the amplifier.
+
+---
+
+## Step 8: Circuit Layout (Draw to Scale)
+
+The figure below shows a block diagram of the microwave amplifier with input matching, output matching (including the stability resistor), and the bias network with quarter-wave transformer and DC/RF blocking elements, plus the common-source MOSFET schematic with gate bias $V_G$, drain resistor $R$, and load $Z_L$.
+
+![Bias network and circuit layout](bias_drawing.jpeg)
