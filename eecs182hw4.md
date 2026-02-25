@@ -50,7 +50,6 @@ Design a MIC single stage amplifier using SMC. Follow the steps below to do your
 
 ![HW4 assignment](HW4.JPG)
 
----
 *All numerical values are from [problem_calc.py](problem_calc.py).*
 
 ## Step 1: Stability and Stability Circles
@@ -283,11 +282,11 @@ Design frequency $f = 5\,\text{GHz}$, $Z_0 = 50\,\Omega$. The matching networks 
 
 ### Input matching (50 $\Omega$ → $Z_{\text{MS}}$)
 
-![Input matching Smith chart](input_smith.jpeg)
+![](input_smith.jpeg)
 
 ### Output matching (50 $\Omega$ → $Z_{\text{ML}}$)
 
-![Output matching Smith chart](output_smith.jpeg)
+![](output_smith.jpeg)
 
 ### Component values (from `problem_calc.py`, $f = 5\,\text{GHz}$)
 
