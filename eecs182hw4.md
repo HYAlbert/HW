@@ -96,17 +96,17 @@ Locus of $\Gamma_L$ for which $|\Gamma_{\text{in}}| = 1$.
 **Center:**
 
 $$
-C_L = \frac{(S_{22} - \Delta S_{11}^{\ast})^{\ast}}{|S_{22}|^{2} - |\Delta|^{2}}
+C_L =\frac{(S_{22} - \Delta S_{11}^{\ast})^{\ast}}{|S_{22}|^{2} - |\Delta|^{2}}
 $$
 
 **Radius:**
 
 $$
-r_L = \frac{|S_{12}S_{21}|}{\left| |S_{22}|^2 - |\Delta|^2 \right|}
+r_L =\frac{|S_{12}S_{21}|}{\left| |S_{22}|^2 - |\Delta|^2 \right|}
 $$
 
 **Numerical results:**
-- $C_L = 1.09 + j1.44$ (or $|C_L| \approx 1.81$, angle $\approx 53°$)
+- $C_L = 1.09 + j1.44$ (or $|C_L| \approx 1.81$, angle $\approx 53^\circ$)
 - $r_L = 1.04$
 
 ### 1.4 Output Stability Circle (Source Plane, $\Gamma_S$)
@@ -116,17 +116,17 @@ Locus of $\Gamma_S$ for which $|\Gamma_{\text{out}}| = 1$.
 **Center:**
 
 $$
-C_S = \frac{(S_{11} - \Delta S_{22}^{\ast})^{\ast}}{|S_{11}|^{2} - |\Delta|^{2}}
+C_S =\frac{(S_{11} - \Delta S_{22}^{\ast})^{\ast}}{|S_{11}|^{2} - |\Delta|^{2}}
 $$
 
 **Radius:**
 
 $$
-r_S = \frac{|S_{12}S_{21}|}{\left| |S_{11}|^2 - |\Delta|^2 \right|}
+r_S =\frac{|S_{12}S_{21}|}{\left| |S_{11}|^2 - |\Delta|^2 \right|}
 $$
 
 **Numerical results:**
-- $C_S = 0.463 + j2.06$ (or $|C_S| \approx 2.11$, angle $\approx 77°$)
+- $C_S = 0.463 + j2.06$ (or $|C_S| \approx 2.11$, angle $\approx 77^\circ$)
 - $r_S = 2.51$
 
 ![Stability circles (input and output)](stability_circles.png)
@@ -170,28 +170,28 @@ Device output is connected to resistor input. The cascade is computed using T-pa
 **S → T** (for each two-port):
 
 $$
-T_{11} = \frac{-\det(\mathbf{S})}{S_{21}}, \quad T_{12} = \frac{S_{11}}{S_{21}}, \quad T_{21} = \frac{-S_{22}}{S_{21}}, \quad T_{22} = \frac{1}{S_{21}}.
+T_{11} =\frac{-\det(\mathbf{S})}{S_{21}}, \quad T_{12} = \frac{S_{11}}{S_{21}}, \quad T_{21} = \frac{-S_{22}}{S_{21}}, \quad T_{22} = \frac{1}{S_{21}}.
 $$
 
 **T → S** (for composite):
 
 $$
-{S'}_{11} = \frac{T_{12}}{T_{22}}, \quad {S'}_{21} = \frac{1}{T_{22}}, \quad {S'}_{12} = \frac{\det(\mathbf{T})}{T_{22}}, \quad {S'}_{22} = \frac{-T_{21}}{T_{22}}, \quad \det(\mathbf{T}) = T_{11}T_{22} - T_{12}T_{21}.
+S^{\prime}_{11} =\frac{T_{12}}{T_{22}}, \quad S^{\prime}_{21} = \frac{1}{T_{22}}, \quad S^{\prime}_{12} = \frac{\det(\mathbf{T})}{T_{22}}, \quad S^{\prime}_{22} = \frac{-T_{21}}{T_{22}}, \quad \det(\mathbf{T}) = T_{11}T_{22} - T_{12}T_{21}.
 $$
 
 ### 2.4 New S-Parameters (Composite: Device + Resistor)
 
 | Parameter | Rectangular form $a + jb$   |
 | --------- | -------------------------- |
-| ${S'}_{11}$ | $0.328 + j0.047$           |
-| ${S'}_{21}$ | $1.07 + j0.473$            |
-| ${S'}_{12}$ | $0.060 + j0.100$            |
-| ${S'}_{22}$ | $-0.137 - j0.261$          |
+| $S^{\prime}_{11}$ | $0.328 + j0.047$           |
+| $S^{\prime}_{21}$ | $1.07 + j0.473$            |
+| $S^{\prime}_{12}$ | $0.060 + j0.100$            |
+| $S^{\prime}_{22}$ | $-0.137 - j0.261$          |
 
 ### 2.5 Stability Verification
 
 $$
-\Delta' = {S'}_{11}{S'}_{22} - {S'}_{12}{S'}_{21}, \qquad K' = \frac{1 - |{S'}_{11}|^2 - |{S'}_{22}|^2 + |\Delta'|^2}{2\,|{S'}_{12}{S'}_{21}|}.
+\Delta' = S^{\prime}_{11}S^{\prime}_{22} - S^{\prime}_{12}S^{\prime}_{21}, \qquad K' = \frac{1 - |S^{\prime}_{11}|^2 - |S^{\prime}_{22}|^2 + |\Delta'|^2}{2\,|S^{\prime}_{12}S^{\prime}_{21}|}.
 $$
 
 **Numerical values:**
@@ -208,7 +208,7 @@ $$
 For the stabilized device (original plus shunt resistor), the **maximum stable gain** is
 
 $$
-G_{\text{MSG}} = \left| \frac{{S'}_{21}}{{S'}_{12}} \right|.
+G_{\text{MSG}} =\left| \frac{S^{\prime}_{21}}{S^{\prime}_{12}} \right|.
 $$
 
 Using the composite S-parameters from Problem 2,
@@ -220,26 +220,30 @@ Using the composite S-parameters from Problem 2,
 
 ## Problem 4: $\Gamma_{\text{ML}}$ and $\Gamma_{\text{MS}}$ (Simultaneous Conjugate Match)
 
-For the unconditionally stable composite device, the **simultaneous conjugate match** gives the source and load reflection coefficients that maximize transducer gain. Using the composite S-parameters ${S'}_{ij}$ and $\Delta' = {S'}_{11}{S'}_{22} - {S'}_{12}{S'}_{21}$:
+For the unconditionally stable composite device, the **simultaneous conjugate match** gives the source and load reflection coefficients that maximize transducer gain. Using the composite S-parameters $S^{\prime}_{ij}$ and $\Delta' = S^{\prime}_{11}S^{\prime}_{22} - S^{\prime}_{12}S^{\prime}_{21}$:
 
 **Source side (input match):**
+
 $$
-B_1 = 1 + |{S'}_{11}|^2 - |{S'}_{22}|^2 - |\Delta'|^2, \qquad
-C_1 = {S'}_{11} - \Delta' {S'}_{22}^*
+B_1 = 1 + |S^{\prime}_{11}|^2 - |S^{\prime}_{22}|^2 - |\Delta'|^2, \qquad
+C_1 = S^{\prime}_{11} - \Delta' S^{\prime}_{22}^*
 $$
 $$
 \Gamma_{\text{MS}} = \frac{B_1 - \sqrt{B_1^2 - 4|C_1|^2}}{2 C_1}
 $$
+
 (The minus sign in front of the square root is chosen so that $|\Gamma_{\text{MS}}| < 1$ for a passive source termination.)
 
 **Load side (output match):**
+
 $$
-B_2 = 1 + |{S'}_{22}|^2 - |{S'}_{11}|^2 - |\Delta'|^2, \qquad
-C_2 = {S'}_{22} - \Delta' {S'}_{11}^*
+B_2 = 1 + |S^{\prime}_{22}|^2 - |S^{\prime}_{11}|^2 - |\Delta'|^2, \qquad
+C_2 = S^{\prime}_{22} - \Delta' S^{\prime}_{11}^*
 $$
 $$
 \Gamma_{\text{ML}} = \frac{B_2 - \sqrt{B_2^2 - 4|C_2|^2}}{2 C_2}
 $$
+
 (The minus sign gives $|\Gamma_{\text{ML}}| < 1$ for a passive load.)
 
 **Numerical values** (from `problem_calc.py`, composite with $R = 50\,\Omega$):
