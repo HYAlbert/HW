@@ -65,6 +65,8 @@ Convert from magnitude and angle (linear scale, degrees) using $S_{ij} = |S_{ij}
 | $S_{12}$  | $0.139 + j0.144$          |
 | $S_{22}$  | $0.341 - j0.766$          |
 
+*All Problem 1 and Problem 2 numerical values are from [problem_calc.py](problem_calc.py).*
+
 ### 1.2 Stability Factor $K$
 
 **Definitions** (Rollett):
@@ -78,13 +80,13 @@ K = \frac{1 - |S_{11}|^2 - |S_{22}|^2 + |\Delta|^2}{2\,|S_{12}S_{21}|}
 $$
 
 **Numerical values:**
-- $\Delta = -0.322 - j0.564$
-- $|\Delta| = 0.650$
-- $K = 0.698$
+- $\Delta = S_{11}S_{22} - S_{12}S_{21} = 0.0276 - j0.564$
+- $|\Delta| = 0.565$
+- $K = 0.569$
 
 **Stability criterion (unconditional stability):** $K > 1$ and $|\Delta| < 1$.
 
-Here $K = 0.698 < 1$, so the device is **conditionally stable**. The input and output stability circles must be drawn to identify safe source and load terminations.
+Here $K = 0.569 < 1$, so the device is **conditionally stable**. The input and output stability circles must be drawn to identify safe source and load terminations.
 
 ### 1.3 Input Stability Circle (Load Plane, $\Gamma_L$)
 
@@ -101,8 +103,8 @@ r_L = \frac{|S_{12}S_{21}|}{\left| |S_{22}|^2 - |\Delta|^2 \right|}
 $$
 
 **Numerical results:**
-- $C_L = 1.94 + j2.16$ (or $|C_L| \approx 2.91$, angle $\approx 48°$)
-- $r_L = 1.42$
+- $C_L = 1.09 + j1.44$ (or $|C_L| \approx 1.81$, angle $\approx 53°$)
+- $r_L = 1.04$
 
 ### 1.4 Output Stability Circle (Source Plane, $\Gamma_S$)
 
@@ -119,5 +121,63 @@ r_S = \frac{|S_{12}S_{21}|}{\left| |S_{11}|^2 - |\Delta|^2 \right|}
 $$
 
 **Numerical results:**
-- $C_S = -0.175 + j2.27$ (or $|C_S| \approx 2.28$, angle $\approx 94°$)
-- $r_S = 1.53$
+- $C_S = 0.463 + j2.06$ (or $|C_S| \approx 2.11$, angle $\approx 77°$)
+- $r_S = 2.51$
+
+![Stability circles (input and output)](stability_circles.png)
+
+---
+
+## Problem 2: Output Loss and New S-Parameters
+
+Add loss at the output so the composite two-port is unconditionally stable, then compute its scattering parameters. The loss is modeled as a **shunt resistor** $R$ at the device output (reference $Z_0 = 50\,\Omega$). The composite two-port is: [Device] → [Shunt R] → load.
+
+### 2.1 Output Loss (Shunt Resistor)
+
+With $Z_0 = 50\,\Omega$ and shunt resistance $R$, the two-port S-parameters of the resistor block are:
+
+$$
+S_{11}^{(R)} = S_{22}^{(R)} = \frac{-Z_0}{2R + Z_0}, \qquad S_{12}^{(R)} = S_{21}^{(R)} = \frac{2R}{2R + Z_0}.
+$$
+
+**Choice:** $R = 50\,\Omega$ (equal to $Z_0$).
+
+**Numerical values:**
+- $S_{11}^{(R)} = S_{22}^{(R)} = -\frac{1}{3} \approx -0.333$
+- $S_{12}^{(R)} = S_{21}^{(R)} = \frac{2}{3} \approx 0.667$
+
+### 2.2 Cascade via T-Parameters
+
+Device output is connected to resistor input. The cascade is computed using T-parameters: $\mathbf{T}_{\text{cascade}} = \mathbf{T}_{\text{device}} \cdot \mathbf{T}_{\text{resistor}}$, then convert back to S.
+
+**S → T** (for each two-port):
+$$
+T_{11} = \frac{-\det(\mathbf{S})}{S_{21}}, \quad T_{12} = \frac{S_{11}}{S_{21}}, \quad T_{21} = \frac{-S_{22}}{S_{21}}, \quad T_{22} = \frac{1}{S_{21}}.
+$$
+
+**T → S** (for composite):
+$$
+S'_{11} = \frac{T_{12}}{T_{22}}, \quad S'_{21} = \frac{1}{T_{22}}, \quad S'_{12} = \frac{\det(\mathbf{T})}{T_{22}}, \quad S'_{22} = \frac{-T_{21}}{T_{22}}, \quad \det(\mathbf{T}) = T_{11}T_{22} - T_{12}T_{21}.
+$$
+
+### 2.3 New S-Parameters (Composite: Device + Resistor)
+
+| Parameter | Rectangular form $a + jb$   |
+| --------- | -------------------------- |
+| $S'_{11}$ | $0.328 + j0.047$           |
+| $S'_{21}$ | $1.07 + j0.473$            |
+| $S'_{12}$ | $0.060 + j0.100$            |
+| $S'_{22}$ | $-0.137 - j0.261$          |
+
+### 2.4 Stability Verification
+
+$$
+\Delta' = S'_{11}S'_{22} - S'_{12}S'_{21}, \qquad K' = \frac{1 - |S'_{11}|^2 - |S'_{22}|^2 + |\Delta'|^2}{2\,|S'_{12}S'_{21}|}.
+$$
+
+**Numerical values:**
+- $\Delta' = -0.050 - j0.227$
+- $|\Delta'| = 0.233$
+- $K' = 3.15$
+
+**Conclusion:** $K' > 1$ and $|\Delta'| < 1$, so the composite (device with shunt resistor at the output) is **unconditionally stable**.
