@@ -214,19 +214,19 @@ $$
 For the stabilized device (original plus shunt resistor), the **maximum stable gain** is
 
 $$
-G_{\text{MSG}} = \left| \frac{S^{\prime}_{21}}{S^{\prime}_{12}} \right|
+G_{\text{MSG}} = \frac{|S^{\prime}_{21}|}{|S^{\prime}_{12}|} \left( K^{\prime} - \sqrt{K^{\prime 2} - 1} \right)
 $$
 
-Using the composite S-parameters from Steps 2–3,
+with $K^{\prime} > 1$ and $|\Delta^{\prime}| < 1$. Using the composite S-parameters and $K^{\prime}$ from Steps 2–3,
 
-- $G_{\text{MSG}} = 10.0$ (linear)
-- $G_{\text{MSG}} \approx 20.0\,\text{dB}$
+- $G_{\text{MSG}} = 1.63$ (linear)
+- $G_{\text{MSG}} \approx 4.25\,\text{dB}$
 
 ---
 
 ## Step 5: $\Gamma_{\text{ML}}$ and $\Gamma_{\text{MS}}$ (Simultaneous Conjugate Match)
 
-For the unconditionally stable composite device, the simultaneous conjugate match gives the source and load reflection coefficients that maximize transducer gain. Using the composite S-parameters $S'\_\{ij\}$ and $\Delta' = S'\_\{11\}S'\_\{22\} - S'\_\{12\}S'\_\{21\}$:
+For the unconditionally stable composite device, the simultaneous conjugate match gives the source and load reflection coefficients that maximize transducer gain. Using the composite S-parameters $S^{\prime}_{ij}$ and $\Delta' = S^{\prime}_{11}S^{\prime}_{22} - S^{\prime}_{12}S^{\prime}_{21}$:
 
 **Source side (input match):**
 
@@ -261,4 +261,37 @@ $$
 | $\Gamma_{\text{MS}}$ | $0.294 - j0.032$ | $0.296$ |
 | $\Gamma_{\text{ML}}$ | $-0.127 + j0.217$ | $0.252$ |
 
+**Conjugate-match impedances** ($Z = Z_0(1+\Gamma)/(1-\Gamma)$ with $Z_0 = 50\,\Omega$):
+
+| Quantity | Value (Ohm) | Normalized $z = Z/Z_0$ |
+| --- | --- | --- |
+| $Z_{\text{MS}}$ | $91.38 - j6.41$ | $1.828 - j0.128$ |
+| $Z_{\text{ML}}$ | $35.54 + j16.50$ | $0.711 + j0.330$ |
+
 Both $|\Gamma_{\text{MS}}|$ and $|\Gamma_{\text{ML}}|$ are less than 1, so the corresponding terminations are **passive** and realizable. I select these as the design values for the input and output matching networks: the source matching network should present $\Gamma_{\text{MS}}$ to the composite device input, and the load matching network should present $\Gamma_{\text{ML}}$ to the composite device output (or equivalently, the load impedance that gives reflection $\Gamma_{\text{ML}}$ when looking into the output port).
+
+---
+
+## Step 6: Input and Output Matching Networks (Smith Chart)
+
+Design frequency $f = 5\,\text{GHz}$, $Z_0 = 50\,\Omega$. The matching networks transform 50 $\Omega$ to the conjugate-match impedances $Z_{\text{MS}}$ (input) and $Z_{\text{ML}}$ (output) using two-element L-sections. Below is a procedure for drawing the design on a Smith chart by hand.
+
+### Target impedances (for the chart)
+
+- **Input:** Match 50 $\Omega$ to $Z_{\text{MS}} = 91.38 - j6.41\,\Omega$. Normalized $z_{\text{MS}} = 1.828 - j0.128$.
+- **Output:** Match 50 $\Omega$ to $Z_{\text{ML}} = 35.54 + j16.50\,\Omega$. Normalized $z_{\text{ML}} = 0.711 + j0.330$.
+
+### Input matching (50 $\Omega$ → $Z_{\text{MS}}$)
+
+![Input matching Smith chart](input_smith.jpeg)
+
+### Output matching (50 $\Omega$ → $Z_{\text{ML}}$)
+
+![Output matching Smith chart](output_smith.jpeg)
+
+### Component values (from `problem_calc.py`, $f = 5\,\text{GHz}$)
+
+| Network | Topology | Element 1 | Element 2 |
+| --- | --- | --- | --- |
+| Input (50 $\Omega$ → $Z_{\text{MS}}$) | series L, shunt C | $L = 1.46\,\text{nH}$ (series) | $C = 0.34\,\text{pF}$ (shunt) |
+| Output (50 $\Omega$ → $Z_{\text{ML}}$) | shunt C, series L | $C = 0.41\,\text{pF}$ (shunt) | $L = 1.25\,\text{nH}$ (series) |

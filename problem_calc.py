@@ -183,8 +183,9 @@ r_S_p = _result["r_S_p"]
 # =============================================================================
 # PROBLEM 3: Maximum stable gain of composite device
 # =============================================================================
-
-G_MSG = abs(Sp21 / Sp12)
+# For unconditionally stable device (K' > 1): G_MSG = (|S'21|/|S'12|) * (K' - sqrt(K'^2 - 1))
+_ratio = abs(Sp21) / abs(Sp12)
+G_MSG = _ratio * (K_p - cmath.sqrt(K_p**2 - 1).real)
 
 
 # =============================================================================
@@ -205,6 +206,90 @@ C2 = Sp22 - Delta_p * Sp11.conjugate()
 disc2 = B2**2 - 4 * abs(C2) ** 2
 # Minus sign gives |Gamma_ML| < 1
 Gamma_ML = (B2 - cmath.sqrt(disc2)) / (2 * C2) if abs(C2) > 1e-12 else 0
+
+# Impedances for conjugate match: Z = Z0 * (1 + Gamma) / (1 - Gamma)
+Z_MS = Z0 * (1 + Gamma_MS) / (1 - Gamma_MS)
+Z_ML = Z0 * (1 + Gamma_ML) / (1 - Gamma_ML)
+
+
+# =============================================================================
+# Step 6: L-section matching (50 Ohm to Z_MS and 50 Ohm to Z_ML), f = 5 GHz
+# =============================================================================
+# Normalized z = Z/Z0 = r + jx. Match from 50 Ohm (center) to z.
+# Returns (L_nH, C_pF, topology_str) for each network; one element may be 0 if the other is used.
+
+F_GHZ = 5.0
+omega = 2 * cmath.pi * F_GHZ * 1e9  # rad/s
+
+
+def l_section_match(Z_target, Z0_ref):
+    """
+    Match Z0_ref (50 Ohm) to Z_target (complex). Returns dict with topology string and
+    component values in nH and pF: L1_nH, C1_pF, L2_nH, C2_pF (two of these are 0),
+    and 'topology' e.g. 'series L, shunt C'.
+    """
+    z = Z_target / Z0_ref
+    r, x = z.real, z.imag
+    if r <= 0:
+        raise ValueError("Real part of target impedance must be positive")
+    out = {"L1_nH": 0, "C1_pF": 0, "L2_nH": 0, "C2_pF": 0, "topology": ""}
+    if r > 1:
+        # Series first, then shunt. Intermediate on r=1 circle: z_A = 1 + j*x_A
+        rad = (r * r - r + x * x) / r
+        if rad < 0:
+            rad = 0
+        x_A = cmath.sqrt(rad).real
+        # Prefer series L + shunt C (x_A > 0, B > 0)
+        X_series = Z0_ref * x_A
+        B_shunt_norm = x_A / (1 + x_A * x_A) - x / (r * r + x * x)
+        if B_shunt_norm < 0:
+            x_A = -x_A
+            X_series = Z0_ref * x_A
+            B_shunt_norm = x_A / (1 + x_A * x_A) - x / (r * r + x * x)
+        if X_series > 0 and B_shunt_norm > 0:
+            out["L1_nH"] = (X_series / omega) * 1e9
+            out["C2_pF"] = (B_shunt_norm / Z0_ref / omega) * 1e12
+            out["topology"] = "series L, shunt C"
+        elif X_series < 0 and B_shunt_norm > 0:
+            out["C1_pF"] = (-1 / (omega * X_series)) * 1e12  # series C: X = -1/(omega*C), X_series < 0
+            out["C2_pF"] = (B_shunt_norm / Z0_ref / omega) * 1e12
+            out["topology"] = "series C, shunt C"
+        elif X_series > 0 and B_shunt_norm < 0:
+            out["L1_nH"] = (X_series / omega) * 1e9
+            out["L2_nH"] = (Z0_ref / (omega * (-B_shunt_norm))) * 1e9  # shunt L: B = b/Z0, L = Z0/(omega*|b|)
+            out["topology"] = "series L, shunt L"
+        else:
+            out["C1_pF"] = (-1 / (omega * X_series)) * 1e12
+            out["L2_nH"] = (Z0_ref / (omega * (-B_shunt_norm))) * 1e9
+            out["topology"] = "series C, shunt L"
+        return out
+    else:
+        # r < 1: shunt first, then series
+        rad = (1 - r) / r
+        if rad < 0:
+            rad = 0
+        b = cmath.sqrt(rad).real
+        X_norm = x + r * b
+        X_series = Z0_ref * X_norm
+        # Shunt C (b > 0)
+        C_shunt_pF = (b / Z0_ref / omega) * 1e12
+        if X_series > 0:
+            out["L2_nH"] = (X_series / omega) * 1e9
+            out["C1_pF"] = C_shunt_pF
+            out["topology"] = "shunt C, series L"
+        else:
+            out["C1_pF"] = C_shunt_pF
+            out["C2_pF"] = (-1 / (omega * X_series)) * 1e12
+            out["topology"] = "shunt C, series C"
+        return out
+
+
+# Input: 50 Ohm -> Z_MS (network presents Z_MS to device)
+match_in = l_section_match(Z_MS, Z0)
+top_in = match_in["topology"]
+# Output: 50 Ohm -> Z_ML (network presents Z_ML to device)
+match_out = l_section_match(Z_ML, Z0)
+top_out = match_out["topology"]
 
 
 # =============================================================================
@@ -274,3 +359,29 @@ if __name__ == "__main__":
     print(f"  |Gamma_MS| = {abs(Gamma_MS):.4f}")
     print(f"Gamma_ML = {fmt(Gamma_ML)}")
     print(f"  |Gamma_ML| = {abs(Gamma_ML):.4f}")
+    print(f"\nZ_MS = {fmt(Z_MS)} Ohm  (input match target)")
+    print(f"Z_ML = {fmt(Z_ML)} Ohm  (output match target)")
+
+    print("\n" + "=" * 60)
+    print("STEP 6: L-section matching networks (f = 5 GHz)")
+    print("=" * 60)
+    print(f"\nInput (50 Ohm -> Z_MS): topology = {top_in}")
+    mi = match_in
+    if mi["L1_nH"] > 0:
+        print(f"  L1 = {mi['L1_nH']:.4f} nH")
+    if mi["L2_nH"] > 0:
+        print(f"  L2 = {mi['L2_nH']:.4f} nH")
+    if mi["C1_pF"] > 0:
+        print(f"  C1 = {mi['C1_pF']:.4f} pF")
+    if mi["C2_pF"] > 0:
+        print(f"  C2 = {mi['C2_pF']:.4f} pF")
+    print(f"\nOutput (50 Ohm -> Z_ML): topology = {top_out}")
+    mo = match_out
+    if mo["L1_nH"] > 0:
+        print(f"  L1 = {mo['L1_nH']:.4f} nH")
+    if mo["L2_nH"] > 0:
+        print(f"  L2 = {mo['L2_nH']:.4f} nH")
+    if mo["C1_pF"] > 0:
+        print(f"  C1 = {mo['C1_pF']:.4f} pF")
+    if mo["C2_pF"] > 0:
+        print(f"  C2 = {mo['C2_pF']:.4f} pF")
