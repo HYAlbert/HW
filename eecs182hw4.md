@@ -36,6 +36,7 @@ Design a MIC single stage amplifier using SMC. Follow the steps below to do your
   - **Pin 1:** GATE (left)
   - **Pin 3:** DRAIN (right)
   - **Pin 2:** SOURCE (bottom)
+
 ---
 
 ### 402 Passive Device Dimensions (inches)
@@ -95,7 +96,7 @@ Locus of $\Gamma_L$ for which $|\Gamma_{\text{in}}| = 1$.
 **Center:**
 
 $$
-C_L = \frac{(S_{22} - \Delta S_{11}^*)^*}{|S_{22}|^2 - |\Delta|^2}
+C_L = \frac{\overline{S_{22} - \Delta \overline{S_{11}}}}{|S_{22}|^2 - |\Delta|^2}
 $$
 
 **Radius:**
@@ -115,7 +116,7 @@ Locus of $\Gamma_S$ for which $|\Gamma_{\text{out}}| = 1$.
 **Center:**
 
 $$
-C_S = \frac{(S_{11} - \Delta S_{22}^*)^*}{|S_{11}|^2 - |\Delta|^2}
+C_S = \frac{\overline{S_{11} - \Delta \overline{S_{22}}}}{|S_{11}|^2 - |\Delta|^2}
 $$
 
 **Radius:**

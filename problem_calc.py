@@ -1,5 +1,5 @@
 """
-EECS 182 HW4 — All problem calculations in one file.
+EECS 182 HW4 — All problem calculations.
 Variables from earlier problems are reused in later ones.
 """
 import cmath
@@ -87,7 +87,7 @@ K_p = (1 - abs(Sp11) ** 2 - abs(Sp22) ** 2 + abs(Delta_p) ** 2) / (
 
 
 # =============================================================================
-# Print all results (for copying into eecs182hw4.md or verification)
+# Print all results
 # =============================================================================
 
 if __name__ == "__main__":
