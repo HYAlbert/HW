@@ -300,12 +300,18 @@ Design frequency $f = 5\,\text{GHz}$, $Z_0 = 50\,\Omega$. The matching networks 
 
 ## Step 7: Bias Network and Decoupling Capacitors
 
-The bias network supplies DC gate bias to the device while isolating RF at the bias ports. A decoupling capacitor are used to short RF to ground at the bias node so that the matching networks see only the intended impedances. A quarter-wave transformer can be used to present an open circuit at the device terminal at the design frequency while passing DC. The schematic below shows the bias network and decoupling capacitors integrated with the amplifier.
+The bias network supplies DC gate bias to the device while isolating RF at the bias ports. Decoupling capacitors are used to short RF to ground at the bias nodes so that the matching networks see only the intended impedances. In practice, the bias **C** and **L** values are chosen so that their reactances at 5.0 GHz are extreme compared to 50 $\Omega$ (e.g., $|X_C| \ll 50\,\Omega$ for RF bypass capacitors and $|X_L| \gg 50\,\Omega$ for RF chokes), so they do not significantly disturb the small-signal matching.
 
 ---
 
 ## Step 8: Circuit Layout (Draw to Scale)
 
-The figure below shows a block diagram of the microwave amplifier with input matching, output matching (including the stability resistor), and the bias network with quarter-wave transformer and DC/RF blocking elements, plus the common-source MOSFET schematic with gate bias $V_G$, drain resistor $R$, and load $Z_L$.
+The figure below shows a block diagram of the microwave amplifier with input matching, output matching (including the stability resistor), and the bias network with quarter-wave transformer and DC/RF blocking elements, plus the common-source MOSFET schematic with gate bias $V_G$, drain resistor $R$, and load $Z_L$. At the design frequency 5.0 GHz, the free-space quarter-wave transformer length is
+
+$$
+\ell_{\lambda/4} = \frac{\lambda_0}{4} = \frac{c}{4 f} \approx 15\,\text{mm} \approx 0.59\,\text{in},
+$$
+
+where $c \approx 3.0\times 10^{8}\,\text{m/s}$ is the speed of light. On a MIC substrate with effective permittivity $\varepsilon_{\text{eff}}$, the physical line length is shorter by $\ell_{\lambda/4} / \sqrt{\varepsilon_{\text{eff}}}$.
 
 ![Bias network and circuit layout](bias_drawing.jpeg)

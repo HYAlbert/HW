@@ -221,6 +221,14 @@ Z_ML = Z0 * (1 + Gamma_ML) / (1 - Gamma_ML)
 F_GHZ = 5.0
 omega = 2 * cmath.pi * F_GHZ * 1e9  # rad/s
 
+# Quarter-wave transformer length at design frequency (free space).
+# Physical length on a substrate with effective permittivity ε_eff is
+# l_qw = λ0 / (4 * sqrt(ε_eff)), where λ0 is the free-space wavelength.
+c0 = 3.0e8  # speed of light in free space (m/s)
+lambda0 = c0 / (F_GHZ * 1e9)
+quarter_lambda_m = lambda0 / 4.0
+quarter_lambda_in = quarter_lambda_m / 0.0254
+
 
 def l_section_match(Z_target, Z0_ref):
     """
@@ -385,3 +393,12 @@ if __name__ == "__main__":
         print(f"  C1 = {mo['C1_pF']:.4f} pF")
     if mo["C2_pF"] > 0:
         print(f"  C2 = {mo['C2_pF']:.4f} pF")
+
+    print("\n" + "=" * 60)
+    print("BIAS NETWORK / QUARTER-WAVE TRANSFORMER")
+    print("=" * 60)
+    print(
+        f"\nQuarter-wave transformer electrical length at {F_GHZ:.1f} GHz "
+        f"(free space): λ0/4 ≈ {quarter_lambda_m*1e3:.2f} mm "
+        f"({quarter_lambda_in:.3f} in)."
+    )
