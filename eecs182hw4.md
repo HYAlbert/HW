@@ -4,14 +4,16 @@
 
 Design a MIC single stage amplifier using SMC. Follow the steps below to do your design.
 
-1. Check amplifier stability at the input and output; if the device is not unconditionally stable, draw the stability circles at the input and output.
-2. If the device is conditionally stable, add loss at the output to make it unconditionally stable.
-3. Compute the new scattering parameters for the device with the resistor added for stability.
-4. Calculate maximum stable gain of the new device (original plus resistor).
-5. Compute $\Gamma_{ML}$ and $\Gamma_{MS}$ and select the corresponding passive loads.
-6. Use the Smith chart to design the input and output matching networks using discrete L, C networks.
-7. Design the bias network for the device including the decoupling capacitors.
-8. Provide a good draw to scale of the circuit layout.
+| Step | Task |
+| ---- | ---- |
+| 1 | Check amplifier stability at the input and output; if the device is not unconditionally stable, draw the stability circles at the input and output. |
+| 2 | If the device is conditionally stable, add loss at the output to make it unconditionally stable. |
+| 3 | Compute the new scattering parameters for the device with the resistor added for stability. |
+| 4 | Calculate maximum stable gain of the new device (original plus resistor). |
+| 5 | Compute $\Gamma_{\text{ML}}$ and $\Gamma_{\text{MS}}$ and select the corresponding passive loads. |
+| 6 | Use the Smith chart to design the input and output matching networks using discrete L, C networks. |
+| 7 | Design the bias network for the device including the decoupling capacitors. |
+| 8 | Provide a good draw to scale of the circuit layout. |
 
 ---
 
@@ -51,7 +53,7 @@ Design a MIC single stage amplifier using SMC. Follow the steps below to do your
 ---
 *All numerical values are from [problem_calc.py](problem_calc.py).*
 
-## Problem 1: Stability and Stability Circles
+## Step 1: Stability and Stability Circles
 
 ### 1.1 Complex S-Parameters
 
@@ -129,7 +131,7 @@ $$
 
 ---
 
-## Problem 2: Output Loss and New S-Parameters
+## Steps 2–3: Output Loss and New S-Parameters
 
 Add loss at the output so the composite two-port is unconditionally stable, then compute its scattering parameters. The loss is modeled as a **shunt resistor** $R$ at the device output (reference $Z_0 = 50\,\Omega$). The composite two-port is: [Device] → [Shunt R] → load.
 
@@ -207,7 +209,7 @@ $$
 
 ---
 
-## Problem 3: Maximum Stable Gain of the Composite Device
+## Step 4: Maximum Stable Gain of the Composite Device
 
 For the stabilized device (original plus shunt resistor), the **maximum stable gain** is
 
@@ -215,14 +217,14 @@ $$
 G_{\text{MSG}} = \left| \frac{S^{\prime}_{21}}{S^{\prime}_{12}} \right|
 $$
 
-Using the composite S-parameters from Problem 2,
+Using the composite S-parameters from Steps 2–3,
 
 - $G_{\text{MSG}} = 10.0$ (linear)
 - $G_{\text{MSG}} \approx 20.0\,\text{dB}$
 
 ---
 
-## Problem 4: $\Gamma_{\text{ML}}$ and $\Gamma_{\text{MS}}$ (Simultaneous Conjugate Match)
+## Step 5: $\Gamma_{\text{ML}}$ and $\Gamma_{\text{MS}}$ (Simultaneous Conjugate Match)
 
 For the unconditionally stable composite device, the simultaneous conjugate match gives the source and load reflection coefficients that maximize transducer gain. Using the composite S-parameters $S'\_\{ij\}$ and $\Delta' = S'\_\{11\}S'\_\{22\} - S'\_\{12\}S'\_\{21\}$:
 
