@@ -8,7 +8,7 @@ Design a MIC single stage amplifier using SMC. Follow the steps below to do your
 2. If the device is conditionally stable, add loss at the output to make it unconditionally stable.
 3. Compute the new scattering parameters for the device with the resistor added for stability.
 4. Calculate maximum stable gain of the new device (original plus resistor).
-5. Compute \Gamma_{ML} and \Gamma_{MS} and select the correspondent passive loads.
+5. Compute $\Gamma_{ML}$ and $\Gamma_{MS}$ and select the corresponding passive loads.
 6. Use the Smith chart to design the input and output matching networks using discrete L, C networks.
 7. Design the bias network for the device including the decoupling capacitors.
 8. Provide a good draw to scale of the circuit layout.
@@ -163,22 +163,22 @@ $$
 **T → S** (for composite):
 
 $$
-S'_{11} = \frac{T_{12}}{T_{22}}, \quad S'_{21} = \frac{1}{T_{22}}, \quad S'_{12} = \frac{\det(\mathbf{T})}{T_{22}}, \quad S'_{22} = \frac{-T_{21}}{T_{22}}, \quad \det(\mathbf{T}) = T_{11}T_{22} - T_{12}T_{21}.
+{S'}_{11} = \frac{T_{12}}{T_{22}}, \quad {S'}_{21} = \frac{1}{T_{22}}, \quad {S'}_{12} = \frac{\det(\mathbf{T})}{T_{22}}, \quad {S'}_{22} = \frac{-T_{21}}{T_{22}}, \quad \det(\mathbf{T}) = T_{11}T_{22} - T_{12}T_{21}.
 $$
 
 ### 2.3 New S-Parameters (Composite: Device + Resistor)
 
 | Parameter | Rectangular form $a + jb$   |
 | --------- | -------------------------- |
-| $S'_{11}$ | $0.328 + j0.047$           |
-| $S'_{21}$ | $1.07 + j0.473$            |
-| $S'_{12}$ | $0.060 + j0.100$            |
-| $S'_{22}$ | $-0.137 - j0.261$          |
+| ${S'}_{11}$ | $0.328 + j0.047$           |
+| ${S'}_{21}$ | $1.07 + j0.473$            |
+| ${S'}_{12}$ | $0.060 + j0.100$            |
+| ${S'}_{22}$ | $-0.137 - j0.261$          |
 
 ### 2.4 Stability Verification
 
 $$
-\Delta' = S'_{11}S'_{22} - S'_{12}S'_{21}, \qquad K' = \frac{1 - |S'_{11}|^2 - |S'_{22}|^2 + |\Delta'|^2}{2\,|S'_{12}S'_{21}|}.
+\Delta' = {S'}_{11}{S'}_{22} - {S'}_{12}{S'}_{21}, \qquad K' = \frac{1 - |{S'}_{11}|^2 - |{S'}_{22}|^2 + |\Delta'|^2}{2\,|{S'}_{12}{S'}_{21}|}.
 $$
 
 **Numerical values:**
@@ -186,4 +186,4 @@ $$
 - $|\Delta'| = 0.233$
 - $K' = 3.15$
 
-**Conclusion:** $K' > 1$ and $|\Delta'| < 1$, so the composite (device with shunt resistor at the output) is **unconditionally stable**.
+**Conclusion:** ${K'} > 1$ and $|{\Delta'}| < 1$, so the composite (device with shunt resistor at the output) is **unconditionally stable**.
