@@ -137,7 +137,19 @@ $$
 
 Add loss at the output so the composite two-port is unconditionally stable, then compute its scattering parameters. The loss is modeled as a **shunt resistor** $R$ at the device output (reference $Z_0 = 50\,\Omega$). The composite two-port is: [Device] → [Shunt R] → load.
 
-### 2.1 Output Loss (Shunt Resistor)
+### 2.1 Minimum loss for stability
+
+Using `problem_calc.py`, I swept the shunt resistance to find the **largest** $R$ (i.e., the **minimum loss**) such that the composite satisfies $K' \geq 1$ and $|\Delta'| < 1$.
+
+At the stability boundary:
+
+- $R \approx 299.3\,\Omega$ (marginally stable: $K' = 1$)
+- $K' \approx 1.00$
+- $|\Delta'| \approx 0.476$
+
+I chose a different value for the design: **$R = 50\,\Omega$**, which gives $K' > 1$ and makes the composite **unconditionally stable**. All following calculations use $R = 50\,\Omega$.
+
+### 2.2 Output Loss (Shunt Resistor)
 
 With $Z_0 = 50\,\Omega$ and shunt resistance $R$, the two-port S-parameters of the resistor block are:
 
@@ -145,13 +157,13 @@ $$
 S_{11}^{(R)} = S_{22}^{(R)} = \frac{-Z_0}{2R + Z_0}, \qquad S_{12}^{(R)} = S_{21}^{(R)} = \frac{2R}{2R + Z_0}.
 $$
 
-**Choice:** $R = 50\,\Omega$ (equal to $Z_0$).
+**Choice:** $R = 50\,\Omega$ (chosen for unconditional stability; boundary is $R \approx 299.3\,\Omega$).
 
 **Numerical values:**
 - $S_{11}^{(R)} = S_{22}^{(R)} = -\frac{1}{3} \approx -0.333$
 - $S_{12}^{(R)} = S_{21}^{(R)} = \frac{2}{3} \approx 0.667$
 
-### 2.2 Cascade via T-Parameters
+### 2.3 Cascade via T-Parameters
 
 Device output is connected to resistor input. The cascade is computed using T-parameters: $\mathbf{T}_{\text{cascade}} = \mathbf{T}_{\text{device}} \cdot \mathbf{T}_{\text{resistor}}$, then convert back to S.
 
@@ -167,7 +179,7 @@ $$
 {S'}_{11} = \frac{T_{12}}{T_{22}}, \quad {S'}_{21} = \frac{1}{T_{22}}, \quad {S'}_{12} = \frac{\det(\mathbf{T})}{T_{22}}, \quad {S'}_{22} = \frac{-T_{21}}{T_{22}}, \quad \det(\mathbf{T}) = T_{11}T_{22} - T_{12}T_{21}.
 $$
 
-### 2.3 New S-Parameters (Composite: Device + Resistor)
+### 2.4 New S-Parameters (Composite: Device + Resistor)
 
 | Parameter | Rectangular form $a + jb$   |
 | --------- | -------------------------- |
@@ -176,7 +188,7 @@ $$
 | ${S'}_{12}$ | $0.060 + j0.100$            |
 | ${S'}_{22}$ | $-0.137 - j0.261$          |
 
-### 2.4 Stability Verification
+### 2.5 Stability Verification
 
 $$
 \Delta' = {S'}_{11}{S'}_{22} - {S'}_{12}{S'}_{21}, \qquad K' = \frac{1 - |{S'}_{11}|^2 - |{S'}_{22}|^2 + |\Delta'|^2}{2\,|{S'}_{12}{S'}_{21}|}.
@@ -184,7 +196,58 @@ $$
 
 **Numerical values:**
 - $\Delta' = -0.050 - j0.227$
-- $|\Delta'| = 0.233$
-- $K' = 3.15$
+- $|\Delta'| \approx 0.233$
+- $K' \approx 3.15$
 
-**Conclusion:** ${K'} > 1$ and $|{\Delta'}| < 1$, so the composite (device with shunt resistor at the output) is **unconditionally stable**.
+**Conclusion:** With $R = 50\,\Omega$, $K' > 1$ and $|{\Delta'}| < 1$, so the composite is **unconditionally stable**. (The boundary value is $R \approx 299.3\,\Omega$, where $K' = 1$.)
+
+---
+
+## Problem 3: Maximum Stable Gain of the Composite Device
+
+For the stabilized device (original plus shunt resistor), the **maximum stable gain** is
+
+$$
+G_{\text{MSG}} = \left| \frac{{S'}_{21}}{{S'}_{12}} \right|.
+$$
+
+Using the composite S-parameters from Problem 2,
+
+- $G_{\text{MSG}} = 10.0$ (linear)
+- $G_{\text{MSG}} \approx 20.0\,\text{dB}$
+
+---
+
+## Problem 4: $\Gamma_{\text{ML}}$ and $\Gamma_{\text{MS}}$ (Simultaneous Conjugate Match)
+
+For the unconditionally stable composite device, the **simultaneous conjugate match** gives the source and load reflection coefficients that maximize transducer gain. Using the composite S-parameters ${S'}_{ij}$ and $\Delta' = {S'}_{11}{S'}_{22} - {S'}_{12}{S'}_{21}$:
+
+**Source side (input match):**
+$$
+B_1 = 1 + |{S'}_{11}|^2 - |{S'}_{22}|^2 - |\Delta'|^2, \qquad
+C_1 = {S'}_{11} - \Delta' {S'}_{22}^*
+$$
+$$
+\Gamma_{\text{MS}} = \frac{B_1 - \sqrt{B_1^2 - 4|C_1|^2}}{2 C_1}
+$$
+(The minus sign in front of the square root is chosen so that $|\Gamma_{\text{MS}}| < 1$ for a passive source termination.)
+
+**Load side (output match):**
+$$
+B_2 = 1 + |{S'}_{22}|^2 - |{S'}_{11}|^2 - |\Delta'|^2, \qquad
+C_2 = {S'}_{22} - \Delta' {S'}_{11}^*
+$$
+$$
+\Gamma_{\text{ML}} = \frac{B_2 - \sqrt{B_2^2 - 4|C_2|^2}}{2 C_2}
+$$
+(The minus sign gives $|\Gamma_{\text{ML}}| < 1$ for a passive load.)
+
+**Numerical values** (from `problem_calc.py`, composite with $R = 50\,\Omega$):
+
+| Quantity      | Value                    | $|\Gamma|$   |
+| ------------- | ------------------------ | -------- |
+| $\Gamma_{\text{MS}}$ | $0.294 - j0.032$          | $0.296$  |
+| $\Gamma_{\text{ML}}$ | $-0.127 + j0.217$         | $0.252$  |
+
+Both $|\Gamma_{\text{MS}}|$ and $|\Gamma_{\text{ML}}|$ are less than 1, so the corresponding terminations are **passive** and realizable. I select these as the design values for the input and output matching networks: the source matching network should present $\Gamma_{\text{MS}}$ to the composite device input, and the load matching network should present $\Gamma_{\text{ML}}$ to the composite device output (or equivalently, the load impedance that gives reflection $\Gamma_{\text{ML}}$ when looking into the output port).
+
