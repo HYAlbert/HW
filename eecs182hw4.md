@@ -96,7 +96,7 @@ Locus of $\Gamma_L$ for which $|\Gamma_{\text{in}}| = 1$.
 **Center:**
 
 $$
-C_L = \frac{\left(S_{22} - \Delta S_{11}^{*}\right)^{*}}{|S_{22}|^{2} - |\Delta|^{2}}
+C_L = \frac{(S_{22} - \Delta S_{11}^{\ast})^{\ast}}{|S_{22}|^{2} - |\Delta|^{2}}
 $$
 
 **Radius:**
