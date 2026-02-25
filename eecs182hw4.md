@@ -116,7 +116,7 @@ Locus of $\Gamma_S$ for which $|\Gamma_{\text{out}}| = 1$.
 **Center:**
 
 $$
-C_S = \frac{\overline{S_{11} - \Delta \overline{S_{22}}}}{|S_{11}|^2 - |\Delta|^2}
+C_S = \frac{(S_{11} - \Delta S_{22}^{\ast})^{\ast}}{|S_{11}|^{2} - |\Delta|^{2}}
 $$
 
 **Radius:**
